@@ -1,0 +1,45 @@
+{
+  "name": "greenme-be-js-starter",
+  "version": "0.1.0",
+  "description": "Backend service js starter pack",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ndani-Technologies/greenme-be-js-starter.git"
+  },
+  "author": "MM",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Ndani-Technologies/greenme-be-js-starter/issues"
+  },
+  "homepage": "https://github.com/Ndani-Technologies/greenme-be-js-starter#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.5.0",
+    "@commitlint/config-conventional": "^17.4.4",
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "nodemon": "^2.0.22",
+    "prettier": "2.8.7"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --cache --fix",
+      "prettier --write --ignore-unknown"
+    ]
+  }
+}
