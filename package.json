@@ -2,10 +2,10 @@
   "name": "greenme-be-js-starter",
   "version": "0.1.0",
   "description": "Backend service js starter pack",
-  "main": "index.js",
+  "main": "./src/server.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "NODE_ENV=production node ./src/server",
+    "dev": "nodemon ./src/server",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky install"
@@ -21,8 +21,11 @@
   },
   "homepage": "https://github.com/Ndani-Technologies/greenme-be-js-starter#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.0",
