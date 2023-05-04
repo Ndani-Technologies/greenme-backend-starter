@@ -1,6 +1,6 @@
-const app = require("./app");
-const env = require("./configs/dev");
-const logger = require("./middleware/logger");
+import app from "./app";
+import env from "./configs/dev";
+import logger from "./middleware/logger";
 
 const { host, port } = env;
 

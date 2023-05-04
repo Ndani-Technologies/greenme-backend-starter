@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Backend service js starter pack",
   "main": "./src/server.js",
+  "type": "module",
   "scripts": {
     "start": "NODE_ENV=production node ./src/server",
     "dev": "nodemon ./src/server",

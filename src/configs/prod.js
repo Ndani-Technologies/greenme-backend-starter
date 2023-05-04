@@ -3,4 +3,4 @@ const prodEnv = {
   port: process.env.PORT || 3000,
 };
 
-module.exports = prodEnv;
+export default prodEnv;
