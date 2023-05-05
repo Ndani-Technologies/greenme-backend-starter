@@ -9,7 +9,7 @@ const { host, port, dbUrl } = env;
 (async () => {
   try {
     await connectDB(dbUrl);
-    logger.info("✌️ DB loaded and connected!");
+    logger.info("✌️  DB loaded and connected!");
 
     app.listen(
       port,

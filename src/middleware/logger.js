@@ -1,14 +1,47 @@
 import { createLogger, format, transports } from "winston";
+import "winston-daily-rotate-file";
 
-const { combine, timestamp, label, prettyPrint } = format;
+const getLogger = (filename = "starter-service") => {
+  const fileTransport = new transports.DailyRotateFile({
+    filename: `logs/${filename}-%DATE%.log`,
+    datePattern: "YYYY-MM-DD",
+    zippedArchive: true,
+    maxSize: "20m",
+    maxFiles: "14d",
+  });
 
-const logger = createLogger({
-  format: combine(
-    label({ label: "backend service 1" }),
-    timestamp(),
-    prettyPrint()
-  ),
-  transports: [new transports.Console()],
-});
+  const consoleTransport = new transports.Console({
+    level: process.env.NODE_ENV === "production" ? "error" : "debug",
+    handleExceptions: false,
+    json: false,
+    colorize: true,
+    format: format.printf(
+      (info) => `${info.timestamp} ${info.level}: ${info.message}`
+    ),
+  });
 
-export default logger;
+  const logger = createLogger({
+    level: "info",
+    format: format.combine(
+      format.timestamp({
+        format: "YYYY-MM-DD HH:mm:ss",
+      }),
+      format.errors({ stack: true }),
+      format.splat(),
+      format.printf(
+        ({ level, message, label = process.env.NODE_ENV, timestamp }) =>
+          `${timestamp} [${label}] ${level}: ${message}`
+      )
+    ),
+    defaultMeta: { service: "starter-service" },
+    transports: [consoleTransport],
+  });
+
+  if (process.env.NODE_ENV === "development") {
+    logger.add(fileTransport);
+  }
+
+  return logger;
+};
+
+export default getLogger();
