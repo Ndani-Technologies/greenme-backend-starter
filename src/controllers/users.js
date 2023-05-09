@@ -1,27 +1,41 @@
-const getUsers = (req, res) => {
-  res.status(200).json({ success: true, message: "Show all users" });
-};
+/* eslint-disable import/extensions */
+import logger from "../middleware/logger.js";
+import User from "../models/users.js";
+import asyncHandler from "../middleware/async.js";
+import ErrorResponse from "../utils/error-response.js";
 
-const createUser = (req, res) => {
-  res.status(201).json({ success: true, message: "Create new user" });
-};
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.status(200).json({ success: true, data: users });
+});
 
-const getUser = (req, res) => {
-  res
-    .status(200)
-    .json({ success: true, message: `Show user with id ${req.params.id}` });
-};
+const createUser = asyncHandler(async (req, res) => {
+  const user = await User.create(req.body);
+  res.status(201).json({ success: true, data: user });
+  logger.info(`User created with id ${user.id}`);
+});
 
-const updateUser = (req, res) => {
+const getUser = asyncHandler(async (req, res, next) => {
+  const { id: userId } = req.params;
+  const user = await User.findOne({ _id: req.params.id });
+
+  if (!user) {
+    return next(new ErrorResponse(`No user with id ${userId}`, 404));
+  }
+
+  res.status(200).json({ success: true, data: user });
+});
+
+const updateUser = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json({ success: true, message: `Update user with id ${req.params.id}` });
-};
+});
 
-const deleteUser = (req, res) => {
+const deleteUser = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json({ success: true, message: `Delete user with id ${req.params.id}` });
-};
+});
 
 export { getUsers, createUser, getUser, updateUser, deleteUser };
