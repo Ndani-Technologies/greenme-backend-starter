@@ -1,5 +1,8 @@
-import { Redis } from "ioredis";
+import Redis from "ioredis";
+import * as dotenv from "dotenv";
 
-const redis = new Redis(process.env.REDIS_URL);
+dotenv.config();
 
-export default redis;
+const client = new Redis(process.env.REDIS_URL);
+
+export default client;

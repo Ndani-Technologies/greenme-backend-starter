@@ -3,13 +3,13 @@ import logger from "../middleware/logger.js";
 import User from "../models/users.js";
 import asyncHandler from "../middleware/async.js";
 import ErrorResponse from "../utils/error-response.js";
-import redis from "../configs/redis.js";
+import client from "../configs/redis.js";
 
 /**
  * @desc    Get all users
  */
 const getUsers = asyncHandler(async (req, res) => {
-  const usersCache = await redis.get("users");
+  const usersCache = await client.get("users");
 
   if (usersCache) {
     return res
@@ -19,7 +19,7 @@ const getUsers = asyncHandler(async (req, res) => {
 
   const users = await User.find();
 
-  await redis.set("users", JSON.stringify(users), "EX", 60);
+  await client.set("users", JSON.stringify(users), "EX", 60);
 
   res.status(200).json({ success: true, data: users });
 });
@@ -30,7 +30,7 @@ const getUsers = asyncHandler(async (req, res) => {
 const createUser = asyncHandler(async (req, res) => {
   const user = await User.create(req.body);
 
-  await redis.del("users");
+  await client.del("users");
 
   res.status(201).json({ success: true, data: user });
 
@@ -43,7 +43,7 @@ const createUser = asyncHandler(async (req, res) => {
 const getUser = asyncHandler(async (req, res, next) => {
   const { id: userId } = req.params;
 
-  const userCache = await redis.get(`user:${userId}`);
+  const userCache = await client.get(`user:${userId}`);
 
   if (userCache) {
     return res.status(200).json({ success: true, data: JSON.parse(userCache) });
@@ -55,7 +55,7 @@ const getUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`No user with id ${userId}`, 404));
   }
 
-  await redis.set(`user:${userId}`, JSON.stringify(user), "EX", 60);
+  await client.set(`user:${userId}`, JSON.stringify(user), "EX", 60);
 
   res.status(200).json({ success: true, data: user });
 });
